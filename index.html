@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Decodificador de texto</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js"></script>
+</head>
+
+<body>
+    <main>
+        <div class="divlogo">
+            <img class="logo" src="./assets/logo.svg" alt="logo da alura.">  
+        </div>
+        <section class="criptografador">
+            <textarea class="criptografador_entrada" name="texto" placeholder="Digite seu texto"></textarea>
+            <container class="criptografador_area-botoes">
+                <div class="criptografador_area-botoes_alerta">
+                    <img src="./assets/alerta.svg" alt="icone de exclamação">
+                    <p>Apenas letras minúsculas e sem acento.</p>
+                </div>
+                <nav class="criptografador_area-botoes_botoes">
+                    <a onclick="criptografar()" class="criptografar">Criptografar</a>
+                    <a onclick="descriptografar()" class="descriptografar">Descriptografar</a>
+                </nav>
+            </container>
+        </section>
+        <section id="resultado">
+            <div class="imagem-texto">
+                <img class="imagem" src="./assets/imagem.svg" alt="boneco olhando um diamante.">
+            </div>
+            <div id="mensagem-botao">
+                <h1>Nenhuma mensagem encontrada</h1>
+                <p>Digite um texto que você deseja criptografar ou descriptografar.</p>
+            </div>
+            <div id="copiar" hidden="true" onclick="copiarTexto()">
+                <p>Copiar</p>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
