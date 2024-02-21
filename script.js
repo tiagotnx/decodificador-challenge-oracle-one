@@ -3,69 +3,94 @@ let textoSaida;
 let arrayEntrada = [];
 let arraySaida = [];
 
-function criptografar(){
+function criptografar() {
     obterArrayEntrada();
-    for (let arrayLength = 0; arrayLength < arrayEntrada.length; arrayLength++) { 
-        switch (arrayEntrada[arrayLength]) {
-            case "e":
-                arraySaida.push("enter"); break;
-            case "i":
-                arraySaida.push("imes"); break;
-            case "a":
-                arraySaida.push("ai"); break;
-            case "o":
-                arraySaida.push("ober"); break;
-            case "u":
-                arraySaida.push("ufat"); break; 
-            default:
-                arraySaida.push(arrayEntrada.at(arrayLength));  
-        }
-    }
-    textoSaida = arraySaida.join("");
+    const codificacoes = {
+        e: 'enter',
+        i: 'imes',
+        a: 'ai',
+        o: 'ober',
+        u: 'ufat',
+    };
+    textoSaida = arrayEntrada
+        .map((caractere) => codificacoes[caractere] || caractere)
+        .join('');
     inserirHtml();
     aplicarCss();
-    verificarTextoCss();  
-    arrayEntrada =[]; arraySaida=[];
+    verificarTextoCss();
+    arrayEntrada = [];
+    arraySaida = [];
 }
 
-function descriptografar(){
+function descriptografar() {
     textoEntrada = document.querySelector('textarea').value;
-    textoSaida = textoEntrada.replace(/enter/g, "e");
-    textoSaida = textoSaida.replace(/imes/g, "i");
-    textoSaida = textoSaida.replace(/ai/g, "a");
-    textoSaida = textoSaida.replace(/ober/g, "o");
-    textoSaida = textoSaida.replace(/ufat/g, "u");
+    const substituicoes = {
+        enter: 'e',
+        imes: 'i',
+        ai: 'a',
+        ober: 'o',
+        ufat: 'u',
+    };
+    textoSaida = textoEntrada;
+    for (const [codigo, letra] of Object.entries(substituicoes)) {
+        textoSaida = textoSaida.replace(new RegExp(codigo, 'g'), letra);
+    }
     inserirHtml();
     aplicarCss();
     verificarTextoCss();
 }
-function verificarTextoCss(){
-    if(textoSaida == null || textoSaida == "") {
-        document.querySelector(".imagem-texto").removeAttribute("hidden");
-        document.querySelector("#resultado").style.justifyContent = "center";
-        document.querySelector("#mensagem-botao").style.textAlign = "center";
-        document.querySelector("#mensagem-botao").innerHTML = "<h1>Nenhuma mensagem encontrada</h1><p>Digite um texto que você deseja criptografar ou descriptografar.</p>";
-        document.querySelector("#copiar").setAttribute("hidden", "true");
+
+function verificarTextoCss() {
+    const imagemTexto = document.querySelector('.imagem-texto');
+    const resultado = document.querySelector('#resultado');
+    const mensagemBotao = document.querySelector('#mensagem-botao');
+    const copiar = document.querySelector('#copiar');
+
+    if (!textoSaida) {
+        imagemTexto.removeAttribute('hidden');
+        resultado.style.justifyContent = 'center';
+        mensagemBotao.style.textAlign = 'center';
+        mensagemBotao.innerHTML =
+            '<h1>Nenhuma mensagem encontrada</h1><p>Digite um texto que você deseja criptografar ou descriptografar.</p>';
+        copiar.setAttribute('hidden', 'true');
     }
 }
-function aplicarCss (){
-    document.querySelector(".imagem-texto").setAttribute("hidden", "true");
-    document.querySelector("#resultado").style.justifyContent = "space-between";
-    document.querySelector("#mensagem-botao").style.textAlign = "start";
-    document.querySelector("#copiar").removeAttribute("hidden");
+
+function aplicarCss() {
+    const imagemTexto = document.querySelector('.imagem-texto');
+    const resultado = document.querySelector('#resultado');
+    const mensagemBotao = document.querySelector('#mensagem-botao');
+    const copiar = document.querySelector('#copiar');
+
+    imagemTexto.setAttribute('hidden', 'true');
+    resultado.style.justifyContent = 'space-between';
+    mensagemBotao.style.textAlign = 'start';
+    copiar.removeAttribute('hidden');
 }
-function inserirHtml(){
-    let inserirTexto = document.querySelector("#mensagem-botao");
-    inserirTexto.innerHTML = "<p id='mensagem'>" + textoSaida + "</p>";
+
+function inserirHtml() {
+    let inserirTexto = document.querySelector('#mensagem-botao');
+    inserirTexto.innerHTML = `<p id='mensagem'>${textoSaida}</p>`;
 }
-function obterArrayEntrada(){
+
+function obterArrayEntrada() {
     textoEntrada = document.querySelector('.criptografador_entrada').value;
-    for (let textoLength = 0; textoLength < textoEntrada.length; textoLength++) {
-        arrayEntrada.push(textoEntrada.at(textoLength)); 
+    for (
+        let textoLength = 0;
+        textoLength < textoEntrada.length;
+        textoLength++
+    ) {
+        arrayEntrada.push(textoEntrada.at(textoLength));
     }
 }
-function copiarTexto(){
-    let textoCopiado = document.querySelector("#mensagem");
-    navigator.clipboard.writeText(textoCopiado.innerHTML);
- 
+
+async function copiarTexto() {
+    try {
+        const textoElemento = document.querySelector('#mensagem');
+        const textoParaCopiar = textoElemento.innerHTML;
+        await navigator.clipboard.writeText(textoParaCopiar);
+        console.log('Texto copiado com sucesso!');
+    } catch (error) {
+        console.error('Falha ao copiar texto:', error);
+    }
 }
